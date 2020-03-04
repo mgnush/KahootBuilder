@@ -24,25 +24,22 @@ def extractQuestions(questionFiles):
     questions = []
     # Process each question file
     for questionFile in questionFiles:
-        questionTarget = ""
+        question = ""
         answers = []
-        trueTarget = ""
+        true = ""
         qfile = open(questionFile)
-        for line in qfile:
+        lines = qfile.readlines()
+        for i, line in enumerate(lines):
             # Sort line content
             if line.startswith('[Question'):
-                target = questionTarget
+                question = lines[i+1]
             elif line.startswith('[Answer'):
-                answers.append("")
-                target = answers[len(answers) - 1]
+                answers.append(lines[i+1])
             elif line.startswith('[True'):
-                target = trueTarget
-            else:
-                if not (line.isspace() or line == ""):
-                    target += line
+                true = lines[i+1]
         
         qfile.close()
-        questions.append(KahootQuestion(questionTarget, answers, trueTarget))
+        questions.append(KahootQuestion(question, answers, true))
     
     return questions
 
